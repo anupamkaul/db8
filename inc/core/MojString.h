@@ -116,6 +116,11 @@ private:
 	MojChar* m_end;
 	MojChar* m_endAlloc;
 	static MojChar* s_emptyString;
+	
+	// This works (without the static):
+	//MojChar* s_emptyString;
+
+	//static char* s_emptyString;
 };
 
 template<>

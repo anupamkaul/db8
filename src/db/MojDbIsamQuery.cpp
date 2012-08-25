@@ -120,9 +120,9 @@ MojErr MojDbIsamQuery::count(MojUInt32& countOut)
 	} while (found);
 	countOut = m_count;
 	if (warns > 0) {
-		const MojChar * from = m_plan->query().from().data();
-		MojLogInfo(MojDb::s_log, _T("isamquery_count: from: %s; indexid: %zu; warnings: %zu \n"), 
-								 from, m_plan->idIndex(), warns);
+		//const MojChar * from = m_plan->query().from().data();
+		//MojLogInfo(MojDb::s_log, _T("isamquery_count: from: %s; indexid: %zu; warnings: %zu \n"), 
+								 //from, m_plan->idIndex(), warns);
 	}
 	return MojErrNone;
 }
