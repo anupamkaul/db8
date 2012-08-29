@@ -18,7 +18,7 @@
 
 cmake_minimum_required(VERSION 2.8.7)
 
-project(db8 CXX)
+project(mojodb CXX)
 
 include(webOS/webOS)
 webos_modules_init(1 0 0 QUALIFIER RC2)
@@ -50,9 +50,7 @@ if(ICUI18N STREQUAL "ICUI18N-NOTFOUND")
    message(FATAL_ERROR "Failed to find ICU-I18N libaries. Please intall.")
 endif()
 
-#webos_build_pkgconfig()
-#webos_config_build_doxygen(doc Doxyfile)
-
+webos_build_pkgconfig()
 webos_add_compiler_flags(ALL -g -O2 -Wall -fPIC -Wconversion -Werror -Wno-unused-but-set-variable -Wno-unused-variable -fno-exceptions -fno-rtti -DNDEBUG -fexpensive-optimizations -frename-registers -DMOJ_LINUX -fno-strict-aliasing -DMOJ_INTERNAL -D_REENTRANT)
 webos_add_linker_options(ALL --no-undefined)
 
@@ -215,7 +213,8 @@ target_link_libraries(mojodb-luna
 webos_build_system_bus_files()
 
 # specifying files/launch allows creating upstart scripts
-# of all files named as <name>.in into upstart/name (see cmake_webos)
+# of all files named as <name>.in into upstart/name
+# (see cmake_webos)
 webos_build_daemon(NAME mojodb-luna LAUNCH files/launch/)
 
 # extras
