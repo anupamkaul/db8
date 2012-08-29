@@ -213,9 +213,18 @@ target_link_libraries(mojodb-luna
                       )
 
 webos_build_system_bus_files()
-webos_build_daemon(NAME mojodb-luna LAUNCH files/launch/mojodb)
 
-#install(FILES files/conf/sysservice-backupkeys.json DESTINATION ${WEBOS_INSTALL_WEBOS_SYSCONFDIR})
-#install(FILES files/conf/sysservice.conf DESTINATION ${WEBOS_INSTALL_WEBOS_SYSCONFDIR})
-#install(FILES files/sysbus/com.palm.systemservice.backupRegistration.json DESTINATION ${WEBOS_INSTALL_WEBOS_SYSCONFDIR}/backup)
+# specifying files/launch allows creating upstart scripts
+# of all files named as <name>.in into upstart/name (see cmake_webos)
+webos_build_daemon(NAME mojodb-luna LAUNCH files/launch/)
+
+# extras
+install(FILES src/db-luna/mojodb.conf DESTINATION ${WEBOS_INSTALL_WEBOS_SYSCONFDIR})
+install(FILES src/db-luna/backup-com.palm.db DESTINATION ${WEBOS_INSTALL_WEBOS_SYSCONFDIR}/backup)
+install(FILES src/db-luna/activity-com.palm.db.purge.json DESTINATION ${WEBOS_INSTALL_WEBOS_SYSCONFDIR}/activities/com.palm.db)
+install(FILES src/db-luna/activity-com.palm.db.space.json DESTINATION ${WEBOS_INSTALL_WEBOS_SYSCONFDIR}/activities/com.palm.db)
+
+install(DIRECTORY inc/core/ DESTINATION ${WEBOS_INSTALL_INCLUDEDIR}/mojodb/core)
+install(DIRECTORY inc/db/ DESTINATION ${WEBOS_INSTALL_INCLUDEDIR}/mojodb/db)
+install(DIRECTORY inc/luna/ DESTINATION ${WEBOS_INSTALL_INCLUDEDIR}/mojodb/luna)
 

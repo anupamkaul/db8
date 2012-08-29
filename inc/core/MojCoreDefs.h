@@ -40,6 +40,7 @@
 #	ifndef _T
 #		define _T(X) L##X
 #	endif
+	typedef wchar_t MojChar;
 #else
 #	ifndef _T
 #		define _T(X) X
