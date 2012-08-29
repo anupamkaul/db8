@@ -195,6 +195,7 @@ file(GLOB BDB_SOURCES
           src/db-luna/MojDbBerkeleyQuery.cpp
     )
 
+webos_add_compiler_flags(ALL -DMOJ_USE_BDB)
 include_directories(/usr/local/BerkeleyDB.4.8/include)
 add_executable(mojodb-luna ${LUNA_BIN_SOURCES} ${BDB_SOURCES})
 target_link_libraries(mojodb-luna 
@@ -211,8 +212,8 @@ target_link_libraries(mojodb-luna
                       ${ICUI18N}
                       )
 
-#webos_build_system_bus_files()
-webos_build_daemon(NAME mojodb-luna)
+webos_build_system_bus_files()
+webos_build_daemon(NAME mojodb-luna LAUNCH files/launch/mojodb)
 
 #install(FILES files/conf/sysservice-backupkeys.json DESTINATION ${WEBOS_INSTALL_WEBOS_SYSCONFDIR})
 #install(FILES files/conf/sysservice.conf DESTINATION ${WEBOS_INSTALL_WEBOS_SYSCONFDIR})
