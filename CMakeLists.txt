@@ -50,6 +50,14 @@ if(ICUI18N STREQUAL "ICUI18N-NOTFOUND")
    message(FATAL_ERROR "Failed to find ICU-I18N libaries. Please intall.")
 endif()
 
+# -- check for BerkeleyDB
+# (add an alternate standard path in case building BDB locally: does not override)
+find_library(BDB NAMES db-4.8 PATH /usr/local/BerkeleyDB.4.8/lib)
+if(BDB STREQUAL "BDB-NOTFOUND")
+   message(FATAL_ERROR "Failed to find BerkleyDB libaries. Please intall.")
+endif()
+MESSAGE(STATUS "BDB LIB ${BDB}")
+
 webos_build_pkgconfig()
 webos_add_compiler_flags(ALL -g -O2 -Wall -fPIC -Wconversion -Werror -Wno-unused-but-set-variable -Wno-unused-variable -fno-exceptions -fno-rtti -DNDEBUG -fexpensive-optimizations -frename-registers -DMOJ_LINUX -fno-strict-aliasing -DMOJ_INTERNAL -D_REENTRANT)
 webos_add_linker_options(ALL --no-undefined)
@@ -204,7 +212,8 @@ target_link_libraries(mojodb-luna
                       mojocore
                       mojodb
                       mojoluna
-                      -L/usr/local/BerkeleyDB.4.8/lib;-ldb-4.8 
+                      ${BDB}
+                      #-L/usr/local/BerkeleyDB.4.8/lib;-ldb-4.8 
                       ${LS2_LDFLAGS}
                       ${ICU}
                       ${ICUI18N}
