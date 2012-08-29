@@ -34,50 +34,10 @@ webos_add_compiler_flags(ALL ${GLIB2_CFLAGS})
 pkg_check_modules(GTHREAD2 REQUIRED gthread-2.0)
 webos_add_compiler_flags(ALL ${GTHREAD2_CFLAGS})
 
-# -- check for libxml 2.0
-#pkg_check_modules(GXML2 REQUIRED libxml-2.0)
-#webos_add_compiler_flags(ALL ${GXML2_CFLAGS})
-
-# -- check for sqlite 3.0
-#pkg_check_modules(SQLITE3 REQUIRED sqlite3)
-#webos_add_compiler_flags(ALL ${SQLITE3_CFLAGS})
-
-# -- check for cjson
-#pkg_check_modules(CJSON REQUIRED cjson)
-#include_directories(CJSON_INCLUDE_DIRS)
-#webos_add_compiler_flags(ALL ${CJSON_CFLAGS})
-
-# -- check for mjson
-#pkg_check_modules(MJSON REQUIRED mjson)
-#include_directories(MJSON_INCLUDE_DIRS)
-#webos_add_compiler_flags(ALL ${MJSON_CFLAGS})
-
-# -- check for pbnjson
-#pkg_check_modules(PBNJSON REQUIRED pbnjson)
-#include_directories(PBNJSON_INCLUDE_DIRS)
-#webos_add_compiler_flags(ALL ${PBNJSON_CFLAGS})
-
 # -- check for LS2 (internally depends on pmloglib)
 pkg_check_modules(LS2 REQUIRED luna-service2)
 include_directories(LS2_INCLUDE_DIRS)
 webos_add_compiler_flags(ALL ${LS2_CFLAGS})
-
-# -- check for QtCore 
-# (e.g. /usr/local/Trolltech/QtLighthouse-4.8.0/lib/pkgconfig/QtCore.pc)
-#pkg_check_modules(QTCORE REQUIRED QtCore)
-#include_directories(QTCORE_INCLUDE_DIRS)
-#webos_add_compiler_flags(ALL ${QTCORE_CFLAGS})
-
-# -- check for QtGui
-# (e.g. /usr/local/Trolltech/QtLighthouse-4.8.0/lib/pkgconfig/QtGui.pc)
-#pkg_check_modules(QTGUI REQUIRED QtGui)
-#include_directories(QTGUI_INCLUDE_DIRS)
-#webos_add_compiler_flags(ALL ${QTGUI_CFLAGS})
-
-# -- check for uriparser
-#pkg_check_modules(URIPARSER REQUIRED uriparser)
-#include_directories(URIPARSER_INCLUDE_DIRS)
-#webos_add_compiler_flags(ALL ${URIPARSER_CFLAGS})
 
 # -- check for ICU
 find_library(ICU NAMES icuuc)
@@ -93,8 +53,6 @@ endif()
 #webos_build_pkgconfig()
 #webos_config_build_doxygen(doc Doxyfile)
 
-# -- no way to disable warn_unused_result right now.
-#webos_add_compiler_flags(ALL -g -O2 -Wall -Wno-unused-but-set-variable -Wno-unused-variable -fno-exceptions -fno-rtti -DNDEBUG -fexpensive-optimizations -frename-registers -DMOJ_LINUX -fno-strict-aliasing -DMOJ_INTERNAL -D_REENTRANT)
 webos_add_compiler_flags(ALL -g -O2 -Wall -fPIC -Wconversion -Werror -Wno-unused-but-set-variable -Wno-unused-variable -fno-exceptions -fno-rtti -DNDEBUG -fexpensive-optimizations -frename-registers -DMOJ_LINUX -fno-strict-aliasing -DMOJ_INTERNAL -D_REENTRANT)
 webos_add_linker_options(ALL --no-undefined)
 
@@ -139,6 +97,23 @@ file(GLOB CORE_LIB_SOURCES
         src/core/MojUtil.cpp
         )
 
+add_library(mojocore SHARED ${CORE_LIB_SOURCES})
+target_link_libraries(mojocore 
+                      ${GLIB2_LDFLAGS} 
+                      ${GTHREAD2_LDFLAGS}
+                      ${GXML2_LDFLAGS}
+                      ${SQLITE3_LDFLAGS}
+                      ${CJSON_LDFLAGS}
+                      ${MJSON_LDFLAGS}
+                      -L/usr/local/lib;-lpbnjson_c
+                      -L/usr/local/lib;-lpbnjson_cpp
+                      ${LS2_LDFLAGS}
+                      ${QTCORE_LDFLAGS}
+                      ${QTGUI_LDFLAGS}
+                      ${URIPARSER_LDFLAGS}
+                      )
+webos_build_library(TARGET mojocore NOHEADERS)
+
 # -- source for generating libmojodb.so 
 file(GLOB DB_LIB_SOURCES 
         src/db/MojDb.cpp 
@@ -178,38 +153,14 @@ file(GLOB DB_LIB_SOURCES
         src/db/MojDbServiceHandlerInternal.cpp 
         )
 
-add_library(mojocore SHARED ${CORE_LIB_SOURCES})
-target_link_libraries(mojocore 
-                      ${GLIB2_LDFLAGS} 
-                      ${GTHREAD2_LDFLAGS}
-                      ${GXML2_LDFLAGS}
-                      ${SQLITE3_LDFLAGS}
-                      ${CJSON_LDFLAGS}
-                      ${MJSON_LDFLAGS}
-                      -L/usr/local/lib;-lpbnjson_c
-                      -L/usr/local/lib;-lpbnjson_cpp
-                      ${LS2_LDFLAGS}
-                      ${QTCORE_LDFLAGS}
-                      ${QTGUI_LDFLAGS}
-                      ${URIPARSER_LDFLAGS}
-                      )
-webos_build_library(TARGET mojocore NOHEADERS)
-
 add_library(mojodb SHARED ${DB_LIB_SOURCES})
 target_link_libraries(mojodb 
                       ${GLIB2_LDFLAGS} 
                       ${GTHREAD2_LDFLAGS}
-                      ${GXML2_LDFLAGS}
-                      ${SQLITE3_LDFLAGS}
-                      ${CJSON_LDFLAGS}
-                      ${MJSON_LDFLAGS}
                       -L/usr/local/lib;-lpbnjson_c
                       -L/usr/local/lib;-lpbnjson_cpp
                       -L/usr/local/lib;-lmojocore
                       ${LS2_LDFLAGS}
-                      ${QTCORE_LDFLAGS}
-                      ${QTGUI_LDFLAGS}
-                      ${URIPARSER_LDFLAGS} 
                       ${ICU}
                       ${ICUI18N}
                       )
@@ -227,17 +178,10 @@ add_library(mojoluna SHARED ${LUNA_LIB_SOURCES})
 target_link_libraries(mojoluna 
                       ${GLIB2_LDFLAGS} 
                       ${GTHREAD2_LDFLAGS}
-                      ${GXML2_LDFLAGS}
-                      ${SQLITE3_LDFLAGS}
-                      ${CJSON_LDFLAGS}
-                      ${MJSON_LDFLAGS}
                       -L/usr/local/lib;-lpbnjson_c
                       -L/usr/local/lib;-lpbnjson_cpp
                       -L/usr/local/lib;-lmojocore
                       ${LS2_LDFLAGS}
-                      ${QTCORE_LDFLAGS}
-                      ${QTGUI_LDFLAGS}
-                      ${URIPARSER_LDFLAGS} 
                       ${ICU}
                       ${ICUI18N}
                       )
@@ -256,10 +200,6 @@ add_executable(mojodb-luna ${LUNA_BIN_SOURCES} ${BDB_SOURCES})
 target_link_libraries(mojodb-luna 
                       ${GLIB2_LDFLAGS} 
                       ${GTHREAD2_LDFLAGS}
-                      ${GXML2_LDFLAGS}
-                      ${SQLITE3_LDFLAGS}
-                      ${CJSON_LDFLAGS}
-                      ${MJSON_LDFLAGS}
                       -L/usr/local/lib;-lpbnjson_c
                       -L/usr/local/lib;-lpbnjson_cpp
                       mojocore
@@ -267,9 +207,6 @@ target_link_libraries(mojodb-luna
                       mojoluna
                       -L/usr/local/BerkeleyDB.4.8/lib;-ldb-4.8 
                       ${LS2_LDFLAGS}
-                      ${QTCORE_LDFLAGS}
-                      ${QTGUI_LDFLAGS}
-                      ${URIPARSER_LDFLAGS} 
                       ${ICU}
                       ${ICUI18N}
                       )
