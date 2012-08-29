@@ -253,7 +253,7 @@ file(GLOB BDB_SOURCES
 
 include_directories(/usr/local/BerkeleyDB.4.8/include)
 add_executable(mojodb-luna ${LUNA_BIN_SOURCES} ${BDB_SOURCES})
-target_link_libraries(mojoluna 
+target_link_libraries(mojodb-luna 
                       ${GLIB2_LDFLAGS} 
                       ${GTHREAD2_LDFLAGS}
                       ${GXML2_LDFLAGS}
@@ -262,12 +262,9 @@ target_link_libraries(mojoluna
                       ${MJSON_LDFLAGS}
                       -L/usr/local/lib;-lpbnjson_c
                       -L/usr/local/lib;-lpbnjson_cpp
-                      #-L/usr/local/lib;-lmojocore
-                      #-L/usr/local/lib;-lmojodb
-                      #-L/usr/local/lib;-lmojoluna
-                      -lmojocore
-                      -lmojodb
-                      -lmojoluna
+                      mojocore
+                      mojodb
+                      mojoluna
                       -L/usr/local/BerkeleyDB.4.8/lib;-ldb-4.8 
                       ${LS2_LDFLAGS}
                       ${QTCORE_LDFLAGS}
