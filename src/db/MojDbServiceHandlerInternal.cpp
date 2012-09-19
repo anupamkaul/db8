@@ -691,10 +691,10 @@ MojErr MojDbServiceHandlerInternal::SpaceCheckHandler::handleCancel(MojServiceMe
 
 	m_msg.reset();
 
-	int index = -1;
+	MojSize index = -1;
 	for (MojSize i = 0; i < m_parent->m_spaceCheckHandlers.size(); i++) {
 		if (m_parent->m_spaceCheckHandlers.at(i).get() == this) {
-			index = (int)i;
+			index = i;
 			break;
 		}
 	}

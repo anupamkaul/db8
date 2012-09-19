@@ -1135,7 +1135,7 @@ MojErr MojDbBerkeleyEngine::compact()
 					
 					gettimeofday(&stopTime, NULL);
 				
-					elapsedStepTimeMS = (int)(stopTime.tv_sec - startTime.tv_sec) * 1000 + 
+					elapsedStepTimeMS = (int)(stopTime.tv_sec - startTime.tv_sec) * 1000 +
 							  (int)(stopTime.tv_usec - startTime.tv_usec) / 1000;
 				}
 				
@@ -1170,7 +1170,7 @@ MojErr MojDbBerkeleyEngine::compact()
 				
 				gettimeofday(&stopTime, NULL);
 				
-				int elapsedCompactTimeMS = (int)(stopTime.tv_sec - startTime.tv_sec) * 1000 + 
+				int elapsedCompactTimeMS = (int)(stopTime.tv_sec - startTime.tv_sec) * 1000 +
 						           (int)(stopTime.tv_usec - startTime.tv_usec) / 1000;
 				
 		                MojLogInfo(s_log, _T("Compact stats of %s (partial from ~record %d to %d): time %dms, compact_deadlock=%d, compact_pages_examine=%d, compact_pages_free=%d, compact_levels=%d, compact_pages_truncated=%d\n"),
@@ -1285,7 +1285,7 @@ MojErr MojDbBerkeleyEngine::compact()
 
 			gettimeofday(&stopTime, NULL);
 				
-			int elapsedCompactTimeMS = (int)(stopTime.tv_sec - startTime.tv_sec) * 1000 + 
+			int elapsedCompactTimeMS = (int)(stopTime.tv_sec - startTime.tv_sec) * 1000 +
 					           (int)(stopTime.tv_usec - startTime.tv_usec) / 1000;
 
 			total_compact_time += elapsedCompactTimeMS;
@@ -1342,7 +1342,7 @@ MojErr MojDbBerkeleyEngine::compact()
 	
 	gettimeofday(&totalStopTime, NULL);
 				
-	int elapsedTotalMS = (int)(totalStopTime.tv_sec - totalStartTime.tv_sec) * 1000 + 
+	int elapsedTotalMS = (int)(totalStopTime.tv_sec - totalStartTime.tv_sec) * 1000 +
 		             (int)(totalStopTime.tv_usec - totalStartTime.tv_usec) / 1000;
 
 	memset(&statAtEnd, '\0', sizeof(statAtEnd));
